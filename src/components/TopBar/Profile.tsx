@@ -23,8 +23,8 @@ export default function Profile() {
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody
-          bg={colorMode ? '#1F2341' : "white"}
-          color={colorMode ? 'white' : 'gray.600'}
+          bg={colorMode === 'light' ? "white" : "#22242C"}
+          color={colorMode === 'light' ? 'gray.600' : 'gray.50'}
           py="4"
         >
           <Center flexDirection="column">

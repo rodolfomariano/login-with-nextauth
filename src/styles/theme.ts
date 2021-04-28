@@ -6,11 +6,13 @@ export const theme = extendTheme({
     body: 'Poppins',
   },
   styles: {
-    global: {
+    global: (props) => ({
       body: {
-        bg: 'gray.50' ,
-        color: 'gray.600',
+        // bg: 'gray.50' ,
+        bg: props.colorMode === "dark" ? "#292A33" : "gray.50",
+        color: props.colorMode === "dark" ? "white" : "gray.600",
+        // color : "gray.600"
       }
-    }
+    })
   }
 })

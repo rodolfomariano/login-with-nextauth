@@ -1,4 +1,4 @@
-import { Center, Heading, VStack, Text, Flex, Link, Button, Box, Divider, Grid } from "@chakra-ui/react";
+import { Center, Heading, VStack, Text, Flex, Link, Button, Box, Divider, Grid, useColorModeValue } from "@chakra-ui/react";
 
 import ReCAPTCHA from "react-google-recaptcha"
 import { GoEye, GoEyeClosed, GoLock, GoMail, GoPerson } from "react-icons/go";
@@ -7,6 +7,7 @@ import { ImExit } from 'react-icons/im'
 import { InputWithIcon } from "../components/InputWithIcon";
 
 export default function SignUp() {
+  const bg = useColorModeValue("white", "#22242C" )
 
   function onChange(value) {
     console.log("Captcha value:", value);
@@ -17,7 +18,7 @@ export default function SignUp() {
       <VStack
         w="350px"
         h="540px"
-        bg="white"
+        bg={bg}
         boxShadow="base"
         py="1.5rem"
         px="1rem"

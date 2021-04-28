@@ -13,11 +13,14 @@ import { GoMail } from "react-icons/go"
 import { FormControl } from '@chakra-ui/form-control'
 import { Button } from '@chakra-ui/button'
 import { Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/popover'
+import { useColorModeValue } from '@chakra-ui/color-mode'
 
 export default function Home() {
   const [session, setSession] = useSession()
 
   const router = useRouter()
+
+  const bg = useColorModeValue("white", "#22242C" )
 
   useEffect(() => {
     session && router.push('/app/dashboard')
@@ -27,11 +30,11 @@ export default function Home() {
 
   return (
     <>
-      <Center w="100vw" h="100vh" >
+      <Center w="100vw" h="100vh"  >
        <VStack
          w="350px"
          h="500px"
-         bg="white"
+         bg={bg}
          boxShadow="base"
          py="1.5rem"
          px="1rem"
@@ -53,7 +56,7 @@ export default function Home() {
               // bg="#333"
               // color="white"
               // _hover={{ bg: '#4A4346' }}
-              bg="#EDF2F7"
+              // bg="#EDF2F7"
             />
 
             <BtnLoginSocial 
@@ -64,7 +67,7 @@ export default function Home() {
               borderRadius={50}
               title="Logar com Google"
               // colorScheme="red"
-              bg="#EDF2F7"
+              // bg="#EDF2F7"
             />
           </VStack>
 
@@ -77,7 +80,7 @@ export default function Home() {
               h="40px"
               borderRadius={50}
               alignItems="center"
-              bg="white"
+              bg={bg}
             >
               <Text color="gray.300">ou</Text>
             </Center>
@@ -123,11 +126,11 @@ export default function Home() {
                 <PopoverTrigger>
                   <Text fontSize={12} color="orange.700" cursor="pointer">Esqueceu a senha</Text>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent bg={bg}>
                   <PopoverArrow />
                   <PopoverCloseButton />
                   <PopoverHeader>Recuperar a senha</PopoverHeader>
-                  <PopoverBody>
+                  <PopoverBody >
                     <InputWithIcon 
                       leftIcon={<GoMail size={18} />}
                       placeholder="Digite seu email cadastrado"

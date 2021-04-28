@@ -1,14 +1,17 @@
-import { Flex, Text, useColorMode } from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 
 export function Sidebar() {
-  const { colorMode} = useColorMode()
+
+  const bg = useColorModeValue("white", "#1F2341" )
+  const color = useColorModeValue("gray.600", "gray.50" )
 
   return (
     <Flex
-      w={240}
+      w="20%"
       h="calc(100vh - 50px)"
-      bg={colorMode ? '#1F2341' : "white"}
-      color={colorMode ? 'white' : 'gray.600'}
+      bg={bg}
+      color={color}
+      boxShadow="md"
     >
       <Text>Sidebar</Text>
     </Flex>
