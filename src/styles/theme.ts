@@ -8,10 +8,8 @@ export const theme = extendTheme({
   styles: {
     global: (props) => ({
       body: {
-        // bg: 'gray.50' ,
         bg: props.colorMode === "dark" ? "#292A33" : "gray.50",
-        color: props.colorMode === "dark" ? "white" : "gray.600",
-        // color : "gray.600"
+        color: props.colorMode === "dark" ? "gray.300" : "gray.600",
       }
     })
   }
