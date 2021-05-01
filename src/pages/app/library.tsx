@@ -8,7 +8,7 @@ import { useColorModeValue } from '@chakra-ui/color-mode'
 
 import { FiFolderPlus } from "react-icons/fi"
 import { FcMenu } from "react-icons/fc"
-import { RiLayoutGridFill } from "react-icons/ri"
+import { RiLayoutGridFill, RiLayoutRowFill } from "react-icons/ri"
 import { BsFillCollectionPlayFill, BsSearch } from "react-icons/bs"
 import { IoDocumentText } from "react-icons/io5"
 import { MdForum } from "react-icons/md"
@@ -24,6 +24,7 @@ import { ContentCardClass } from "../../components/ContentCardClass";
 export default function Library() {
   const [inStretch, setStretch] = useState(true)
   const [isVisible, setIsVisible] = useState(true)
+  const [isGridLayout, setIsGridLayout] = useState(true)
 
   const bg = useColorModeValue("white", "#22242C" )
   const color = useColorModeValue("gray.600", "gray.50" )
@@ -63,7 +64,7 @@ export default function Library() {
           w={inStretch === true ? "250px" : "50px"} 
           transition="20ms" 
           borderLeftRadius={10}
-          h="95vh" 
+          // h="95vh" 
           bg={sideNav}
           // py="30px"
           // pl="15px"
@@ -100,7 +101,7 @@ export default function Library() {
 
             <Accordion allowMultiple w="100%" >
               <AccordionItem
-                pb={2}
+                // pb={2}
                 
               >
                   <AccordionButton
@@ -109,7 +110,7 @@ export default function Library() {
                     justifyContent="start"
                     fontWeight="400"
                     fontFamily="Nunito"
-                    mb={2}
+                    // mb={2}
                   >
                     <AiFillFolder size={20} />
                     <Text 
@@ -129,7 +130,7 @@ export default function Library() {
                     borderRadius={0}
                     fontFamily="Nunito"
                     variant="link"
-                    fontSize={14}
+                    fontSize={12}
                     bg={bg}
                     py={3}
                     pl={2}
@@ -156,7 +157,7 @@ export default function Library() {
                     borderRadius={0}
                     fontFamily="Nunito"
                     variant="link"
-                    fontSize={14}
+                    fontSize={12}
                     // bg="white"
                     py={3}
                     pl={2}
@@ -229,32 +230,52 @@ export default function Library() {
                 <Button
                   variant="ghost"
                   w="50px"
+                  onClick={() => setIsGridLayout(!isGridLayout)}
                 >
-                  <RiLayoutGridFill />
+                  {isGridLayout === false ? <RiLayoutGridFill /> : <RiLayoutRowFill /> }
                 </Button>
               </HStack>
 
             </Flex>
               <Box width="100%" h="80vh" py="15px">
-                <Box w="100%" h="100%" py="15px" px="2px" overflowY="auto">
+
+                {isGridLayout 
+                  ? (
+                    <Wrap spacing="20px" py="15px">
+                      <ContentCardClass 
+                        title="Instalação do Next JS"
+                        date="05/10/2022"
+                        description="Nesta aula iremos aprende Como instalar o next js e fazer as configurações basicas"
+                        hrefForum=""
+                        hrefActivity=""
+                        hrefPage=""
+                        srcVideo="https://player.vimeo.com/video/532024091?color=ffffff&title=0&byline=0&portrait=0&badge=0"
+                      >
+
+                      </ContentCardClass>
+                      
+                    </Wrap>
+                  )
+                  : (
+                    <Box w="100%" h="100%" py="15px" px="2px" overflowY="auto">
                   
-                  <ContentListClass
-                    title="Instalação do Next JS"
-                    date="05/10/2022"
-                    description="Nesta aula iremos aprende Como instalar o next js e fazer as configurações basicas"
-                    hrefForum=""
-                    hrefActivity=""
-                    hrefPage=""
-                    srcVideo="https://player.vimeo.com/video/532024091?color=ffffff&title=0&byline=0&portrait=0&badge=0"
-                  >
+                      <ContentListClass
+                        title="Instalação do Next JS"
+                        date="05/10/2022"
+                        description="Nesta aula iremos aprende Como instalar o next js e fazer as configurações basicas"
+                        hrefForum=""
+                        hrefActivity=""
+                        hrefPage=""
+                        srcVideo="https://player.vimeo.com/video/532024091?color=ffffff&title=0&byline=0&portrait=0&badge=0"
+                      >
 
-                  </ContentListClass>
+                      </ContentListClass>
 
-                </Box>
+                    </Box>
+                  )
+                
+                }
 
-                {/* <Wrap>
-                  <ContentCardClass />
-                </Wrap> */}
 
               </Box>
 
