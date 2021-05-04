@@ -1,74 +1,160 @@
-import { Accordion, AccordionButton, AccordionItem, AccordionPanel, Button, Text, useColorModeValue } from "@chakra-ui/react";
-import { useState } from "react";
+import { Accordion, AccordionButton, AccordionItem,  AccordionPanel, Button, Popover, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { MouseEvent, ReactNode, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
-import { SiJavascript, SiNextDotJs } from "react-icons/si";
-import { CategoryItem } from "./CategoryItem";
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
-interface DetachedCourse {
-  title: string
+interface DataFolder {
+  titleOfFolder: string
+  titleIsEdited: boolean,
+  newTitle: string
 }
 
 interface DataCurse {
-  title: string;
+  title: string
+  inFolder: boolean
+  folderTag: string
+  icon: string
 }
 
-interface Item {
-  titleOfFolder?: string,
-  courseOutFolder?: DetachedCourse[],
-  content?: DataCurse[]
-}
 
 interface CategoryContainerProps {
-  titleOfFolder?: string;
+  titleOfFolder?: string
   isVisible: boolean
-  content?: Item[]
+  children: ReactNode
+  // dataCourse?: DataCurse[]
+  // dataFolder?: DataFolder[]
 }
+ 
+
+export function CategoryContainer({ 
+  isVisible, 
+  titleOfFolder, 
+  children,
+  // dataCourse,
+  // dataFolder
+}: CategoryContainerProps) {
+
+  const sideNav = useColorModeValue("#EEEEEE", "gray.800")
+  const baseColor = useColorModeValue("gray.500", "gray.500")
+  const contextMenuHoverColor = useColorModeValue("#dddbdb", "#1d2431")
+
+  // const [myFolders, setMyFolders] = useState(dataFolder)
+  const [isOpen, setIsOpen] = useState(false)
+  const open = () => setIsOpen(!isOpen)
+  const close = () => setIsOpen(false)
 
 
+  // function clickRightButton( event: MouseEvent, titleOfFolder: string ) {
+  //   event.preventDefault()
+  //   console.log(event.target)
+  // }
 
-export function CategoryContainer({ isVisible, titleOfFolder, content }: CategoryContainerProps) {
-  const [isActiveBtn, setIsActiveBtn] = useState('')
-  const [folderBelong, setFolderBelong] = useState('')
-
-  const bg = useColorModeValue("white", "#22242C")
-
-  function handleClick(title) {
-    // setFolderBelong(titleOfFolder)
-    content.forEach(item => titleOfFolder === title && setIsActiveBtn(title))
-
+  function preventContextMenu(event: MouseEvent) {
+    event.preventDefault()
   }
-  console.log(content)
+
+  
+  
+  // function handleRemoveFolder(titleOfFolder) {
+  //   let cont = 0
+  //   dataCourse.forEach(course => course.folderTag === titleOfFolder && cont++)
+
+  //   console.log(`A pasta ${titleOfFolder} tem ${cont} arquivos`)
+  //   const newData = myFolders.find(findFolder => findFolder.titleOfFolder !== titleOfFolder && findFolder)
+  //   dataFolder.pop([{...newData}])
+  //   console.log(myFolders)
+  //   setMyFolders([{...newData}])
+  // }
 
   return (
     <Accordion allowMultiple w="100%" >
       <AccordionItem >
 
-        <AccordionButton w="100%" display="flex" justifyContent="start" fontWeight="400" fontFamily="Nunito">
-          <AiFillFolder size={20} />
-          <Text
-            display={isVisible === true ? "block" : "none"}
-            ml="10px"
+        <Popover
+          returnFocusOnClose={false}
+          isOpen={isOpen}
+          onClose={close}
+          placement="right"
+        >
+
+          <PopoverTrigger >
+            <AccordionButton
+              id={titleOfFolder}
+              as="button"
+              w="100%"
+              h="50px"
+              pl={4}
+              display="flex"
+              justifyContent="start"
+              fontWeight="400"
+              fontFamily="Nunito"
+              color={baseColor}
+              // onAuxClick={event => clickRightButton(event, titleOfFolder)}
+              onContextMenu={(event) => preventContextMenu(event)}
+              onAuxClick={open}
+
+            >
+              <AiFillFolder size={20} />
+              <Text
+                display={isVisible === true ? "block" : "none"}
+                ml="10px"
+              >
+                {titleOfFolder}
+              </Text>
+            </AccordionButton>
+          </PopoverTrigger>
+        
+          <PopoverContent
+            bg={sideNav}
+            fontSize=".8rem"
+            w="130px"
           >
-            {titleOfFolder}
-          </Text>
-        </AccordionButton>
+            
+            <PopoverBody p={0} display="flex" flexDirection="column" >
+              
+                <Button
+                  w="100%"
+                  h="35px"
+                  borderRadius={0}
+                  fontSize=".8rem"
+                  py={0}
+                  leftIcon={<FaRegEdit />}
+                  variant="ghost"
+                  color= {baseColor}
+                  fontFamily="Nunito"
+                  justifyContent="flex-start"
+                  _hover={{ bg: contextMenuHoverColor}}
+                >Editar</Button>
 
+                <Button
+                  w="100%"
+                  h="35px"
+                  borderRadius={0}
+                  fontSize=".8rem"
+                  py={0}
+                  leftIcon={<FaRegTrashAlt />}
+                  variant="ghost"
+                  color= {baseColor}
+                  fontFamily="Nunito"
+                  justifyContent="flex-start"
+                  _hover={{ bg: contextMenuHoverColor }}
+                  // onClick={() => handleRemoveFolder(titleOfFolder)}
+                >Remover</Button>
+              
 
+            </PopoverBody>
+            
+          </PopoverContent>
+        </Popover>
 
-        {/* {content.map(course =>
+        <AccordionPanel w="100%" p={0} pl={isVisible === true ? 6 : 2} >
+          {children}
+        </AccordionPanel>
 
-          <CategoryItem
-            isVisible={isVisible}
-            icon={<SiJavascript size={14} />}
-            title={course.title}
-            // titleOfFolder={titleOfFolder}
-            // onClick={() => handleClick(item.titleOfFolder)}
-            isActiveBtn={isActiveBtn}
-          />
-
-
-        )} */}
-
+        
+        
+          
+    
       </AccordionItem>
     </Accordion>
   )

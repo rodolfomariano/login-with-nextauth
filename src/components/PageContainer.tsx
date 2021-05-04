@@ -16,6 +16,7 @@ export function PageContainer({ title, children, ...rest }: PageContainerProps) 
       <Box
         width="100vw"
         minHeight="100vh"
+        maxWidth="100%"
         h="100%"
         display="flex"
         flex="1"
