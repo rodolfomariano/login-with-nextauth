@@ -9,6 +9,9 @@ import { CgTag } from "react-icons/cg";
 import { CategoryContainer } from "./CategoryContainer";
 import { CategoryItem } from "./CategoryItem";
 import { SiJavascript } from "react-icons/si";
+import { ButtonAddLink } from "./ButtonAddLink";
+import { ButtonToContextMenu } from "./ButtonToContextMenu";
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const dataCourse = [
   {
@@ -48,23 +51,27 @@ const dataFolders = [
     titleIsEdited: false,
     newTitle: ''
   },
+  {
+    titleOfFolder: "Containers",
+    titleIsEdited: false,
+    newTitle: ''
+  },
 ]
 
 
 export function LibraryNavbar() {
+  const [dataBaseFolders, setDataBaseFolders] = useState(dataFolders)
   const [inStretch, setStretch] = useState(true)
   const [isVisible, setIsVisible] = useState(true)
-  const [folderInFocus, setFolderInFocus] = useState()
   const [isActiveBtn, setIsActiveBtn] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [createFolderValue, setCreateFolderValue] = useState('')
-  const toast = useToast()
 
+  const toast = useToast()
   const bg = useColorModeValue("white", "#22242C")
   const sideNav = useColorModeValue("#EEEEEE", "gray.800")
   const baseColor = useColorModeValue("#ADBAC7", "gray.600")
-  const bgBtnAddLink = useColorModeValue("#cae2d1", "#202736")
-  const colorBtnAddLink = useColorModeValue("#818e9b", "gray.600")
+  
   const createCategoryBgColor = useColorModeValue("#e9e6e6", "#1f2735")
   const createCategoryHoverColor = useColorModeValue("#dddbdb", "#1d2431")
 
@@ -83,21 +90,32 @@ export function LibraryNavbar() {
     }
   }
 
-  function handleClick(title) {
+
+  function handleClick(title: string) {
     dataCourse.forEach(item => item.title === title && setIsActiveBtn(title))
   }
 
   function createFolder() {
-    dataFolders.push({ titleOfFolder: createFolderValue, titleIsEdited: false, newTitle: '' })
+    dataBaseFolders.push({ titleOfFolder: createFolderValue, titleIsEdited: false, newTitle: '' })
     onClose()
     toast({
-      title: `Cateroria ${createFolderValue} criada com sucesso!`,
+      title: `Categoria ${createFolderValue} criada com sucesso!`,
       status: 'success',
       position: 'top',
       duration: 4000,
       isClosable: true,
     })
   }
+
+  function handleEditFolder(nameFolder: string) {
+    console.log(nameFolder)
+  }
+
+  function handleDeleteFolder(nameFolder: string) {
+    let data = dataBaseFolders.filter(folder => folder.titleOfFolder !== nameFolder)
+    setDataBaseFolders([...data])
+  }
+
 
   return (
     <Box
@@ -114,20 +132,12 @@ export function LibraryNavbar() {
           <FcMenu />
         </Button>
 
-        <Button
-          flex="1"
+        <ButtonAddLink
           display={isVisible === true ? "flex" : "none"}
-          leftIcon={<AiFillPlusCircle size={24} />}
-          bg={bgBtnAddLink}
-          mx="10px"
-          variant="ghost"
-          borderRadius="50px"
-          fontFamily="Nunito"
-          color={colorBtnAddLink}
-          _hover={{ bg: createCategoryHoverColor }}
-        >
-          Add link
-        </Button>
+          title="Add Link"
+          icon={<AiFillPlusCircle size={24} />}
+        />
+        
       </Flex>
 
       <Tabs >
@@ -142,7 +152,7 @@ export function LibraryNavbar() {
 
         <TabPanels >
           <TabPanel flex="1" px={0}>
-            <VStack flex="1" w="100%" overflowY="auto" >
+            <VStack flex="1" w="100%"  >
               <Button
                 w="100%"
                 display="flex"
@@ -172,6 +182,7 @@ export function LibraryNavbar() {
                       isRequired
                       onChange={event => setCreateFolderValue(event.target.value)}
                       placeholder="Digite o nome da categoria" 
+                      onKeyPress={e => e.key === 'Enter' && createFolder()}
                     />
                   </ModalBody>
 
@@ -185,13 +196,26 @@ export function LibraryNavbar() {
               </Modal>
 
               <Flex w="100%" flexDirection="column">
-                {dataFolders.map(item => (
+                {dataBaseFolders.map(item => (
                   <CategoryContainer
                     key={item.titleOfFolder}
                     titleOfFolder={item.titleIsEdited === true ? item.newTitle : item.titleOfFolder}
-                    // dataCourse={dataCourse.map(course => course.inFolder === true && course)}
                     isVisible={isVisible}
-                    // dataFolder={dataFolders}
+                    editButton={ 
+                      <ButtonToContextMenu 
+                        title="Editar" 
+                        icon={<FaRegEdit />}  
+                        onClick={() => handleEditFolder(item.titleOfFolder)}
+                      /> 
+                    }
+                    removeButton={ 
+                      <ButtonToContextMenu 
+                        title="Remover" 
+                        icon={<FaRegTrashAlt />} 
+                        onClick={() => handleDeleteFolder(item.titleOfFolder)}
+                      /> 
+                    }
+
                   >
                     {dataCourse.map(course => {
                       if(course.folderTag === item.titleOfFolder) {
