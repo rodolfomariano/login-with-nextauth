@@ -12,6 +12,7 @@ import { SiJavascript } from "react-icons/si";
 import { ButtonAddLink } from "./ButtonAddLink";
 import { ButtonToContextMenu } from "./ButtonToContextMenu";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { ModalCreateEndEditFolder } from "./ModalCreateEndEditFolder";
 
 const dataCourse = [
   {
@@ -109,14 +110,21 @@ export function LibraryNavbar() {
   }
 
   function handleEditFolder(nameFolder: string) {
-    // const [indexFolder, setIndexFolder] = useState(0)
-    let i = 0
-    dataBaseFolders.map((folder, indexF) => {
-      if(folder.titleOfFolder === nameFolder) {
-        i = indexF
-      }
-    }  )
-    console.log(i)
+
+    // let data = dataBaseFolders.filter(folder => folder.titleOfFolder !== nameFolder)
+    // dataBaseFolders.map((folder, index) => {
+    //   if(folder.titleOfFolder === nameFolder) {
+
+    //     setDataBaseFolders([...data,
+    //       dataBaseFolders[index] = {
+    //         ...dataBaseFolders[index],
+    //         titleIsEdited: true,
+    //         newTitle: "Eita"
+    //       }
+    //     ])
+    //   }
+    // }  )
+    onOpen()
   }
 
   function handleDeleteFolder(nameFolder: string) {
@@ -180,28 +188,17 @@ export function LibraryNavbar() {
                   Criar categoria</Text>
               </Button>
 
-              <Modal isOpen={isOpen} onClose={onClose} >
-                <ModalOverlay />
-                <ModalContent fontFamily="Nunito" bg={sideNav}>
-                  <ModalHeader>Criar categoria</ModalHeader>
-                  {/* <ModalCloseButton /> */}
-                  <ModalBody>
-                    <Input 
-                      isRequired
-                      onChange={event => setCreateFolderValue(event.target.value)}
-                      placeholder="Digite o nome da categoria" 
-                      onKeyPress={e => e.key === 'Enter' && createFolder()}
-                    />
-                  </ModalBody>
-
-                  <ModalFooter>
-                    <Button variant="ghost" mr={3} onClick={onClose}>
-                      Cancelar
-                    </Button>
-                    <Button colorScheme="blue" onClick={createFolder}>Criar</Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
+              <ModalCreateEndEditFolder 
+                type="edit"
+                isOpen={isOpen}
+                onClose={onClose}
+                onChange={event => setCreateFolderValue(event.target.value)}
+                onKeyPress={e => e.key === 'Enter' && createFolder()}
+                createEditButton={
+                  <Button colorScheme="blue" onClick={createFolder}>Criar</Button>
+                }
+                placeholder="Digite o nome da categoria" 
+              />
 
               <Flex w="100%" flexDirection="column">
                 {dataBaseFolders.map(item => (
