@@ -75,10 +75,11 @@ export function CategoryContainer({
               onAuxClick={open}
 
             >
-              <AiFillFolder size={20} />
+              <AiFillFolder size={18} />
               <Text
                 display={isVisible === true ? "block" : "none"}
                 ml="10px"
+                fontSize=".9rem"
               >
                 {titleOfFolder}
               </Text>

@@ -61,6 +61,7 @@ const dataFolders = [
 
 export function LibraryNavbar() {
   const [dataBaseFolders, setDataBaseFolders] = useState(dataFolders)
+  const [dataBaseCourses, setDataBaseCourses] = useState(dataCourse)
   const [inStretch, setStretch] = useState(true)
   const [isVisible, setIsVisible] = useState(true)
   const [isActiveBtn, setIsActiveBtn] = useState('')
@@ -92,7 +93,7 @@ export function LibraryNavbar() {
 
 
   function handleClick(title: string) {
-    dataCourse.forEach(item => item.title === title && setIsActiveBtn(title))
+    dataBaseCourses.forEach(item => item.title === title && setIsActiveBtn(title))
   }
 
   function createFolder() {
@@ -108,7 +109,14 @@ export function LibraryNavbar() {
   }
 
   function handleEditFolder(nameFolder: string) {
-    console.log(nameFolder)
+    // const [indexFolder, setIndexFolder] = useState(0)
+    let i = 0
+    dataBaseFolders.map((folder, indexF) => {
+      if(folder.titleOfFolder === nameFolder) {
+        i = indexF
+      }
+    }  )
+    console.log(i)
   }
 
   function handleDeleteFolder(nameFolder: string) {
@@ -217,7 +225,7 @@ export function LibraryNavbar() {
                     }
 
                   >
-                    {dataCourse.map(course => {
+                    {dataBaseCourses.map(course => {
                       if(course.folderTag === item.titleOfFolder) {
                         return (
                           <CategoryItem
@@ -236,7 +244,7 @@ export function LibraryNavbar() {
                 ))}
 
 
-                {dataCourse.map(course => (
+                {dataBaseCourses.map(course => (
                   course.inFolder === false && 
                   <Box
                     w="100%"
