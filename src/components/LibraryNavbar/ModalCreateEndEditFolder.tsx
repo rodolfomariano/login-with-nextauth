@@ -9,6 +9,7 @@ import {
   ModalFooter, 
   ModalHeader, 
   ModalOverlay, 
+  Text, 
   useColorModeValue, 
   useDisclosure
 } from "@chakra-ui/react";
@@ -19,10 +20,11 @@ interface ModalCreateEndEditFolderProps extends InputProps{
   createEditButton: ReactElement
   isOpen: boolean
   onClose: () => void
-  type: 'create' | 'edit'
+  type: string
+  nameOfFolder?: string
 }
 
-export function ModalCreateEndEditFolder({ createEditButton, type, isOpen, onClose, ...rest}: ModalCreateEndEditFolderProps) {
+export function ModalCreateEndEditFolder({ createEditButton, type, isOpen, nameOfFolder, onClose, ...rest}: ModalCreateEndEditFolderProps) {
   
   const bg = useColorModeValue("#EEEEEE", "gray.800")
   
@@ -32,6 +34,14 @@ export function ModalCreateEndEditFolder({ createEditButton, type, isOpen, onClo
       <ModalContent fontFamily="Nunito" bg={bg}>
         <ModalHeader>{type === 'create' ? 'Criar categoria' : "Editar o nome"}</ModalHeader>
         <ModalBody>
+          {type === "edit" && 
+            <Text
+            fontFamily="Nunito"
+            fontSize={12}
+            display="flex"
+            > 
+              Nome atual: <Text ml={2} fontWeight="600" color="blue.300">{nameOfFolder}</Text>
+            </Text>}
           <Input
             isRequired
             {...rest}

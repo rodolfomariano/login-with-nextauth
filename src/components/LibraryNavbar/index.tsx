@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Box, Button, Flex, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { FcMenu } from "react-icons/fc";
@@ -8,7 +8,6 @@ import { CgTag } from "react-icons/cg";
 
 import { CategoryContainer } from "./CategoryContainer";
 import { CategoryItem } from "./CategoryItem";
-import { SiJavascript } from "react-icons/si";
 import { ButtonAddLink } from "./ButtonAddLink";
 import { ButtonToContextMenu } from "./ButtonToContextMenu";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
@@ -68,6 +67,8 @@ export function LibraryNavbar() {
   const [isActiveBtn, setIsActiveBtn] = useState('')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [createFolderValue, setCreateFolderValue] = useState('')
+  const [typeOfModal, setTypeOfModal] = useState('create')
+  const [nameOfFolder, setNameOfFolder] = useState('')
 
   const toast = useToast()
   const bg = useColorModeValue("white", "#22242C")
@@ -111,20 +112,21 @@ export function LibraryNavbar() {
 
   function handleEditFolder(nameFolder: string) {
 
-    // let data = dataBaseFolders.filter(folder => folder.titleOfFolder !== nameFolder)
-    // dataBaseFolders.map((folder, index) => {
-    //   if(folder.titleOfFolder === nameFolder) {
+    let data = dataBaseFolders.filter(folder => folder.titleOfFolder !== nameFolder)
+    console.log(data)
+    dataBaseFolders.map((folder, index) => {
+      if(folder.titleOfFolder === nameFolder) {
 
-    //     setDataBaseFolders([...data,
-    //       dataBaseFolders[index] = {
-    //         ...dataBaseFolders[index],
-    //         titleIsEdited: true,
-    //         newTitle: "Eita"
-    //       }
-    //     ])
-    //   }
-    // }  )
-    onOpen()
+        setDataBaseFolders([...data,
+          dataBaseFolders[index] = {
+            ...dataBaseFolders[index],
+            titleIsEdited: true,
+            newTitle: createFolderValue
+          }
+        ])
+      }
+    }  )
+    onClose()
   }
 
   function handleDeleteFolder(nameFolder: string) {
@@ -178,7 +180,10 @@ export function LibraryNavbar() {
                 fontFamily="Nunito"
                 bg={createCategoryBgColor}
                 _hover={{ bg: createCategoryHoverColor }}
-                onClick={onOpen}
+                onClick={() => {
+                  onOpen()
+                  setTypeOfModal('create')
+                }}
               >
                 <FiFolderPlus size={20} />
                 <Text
@@ -187,18 +192,6 @@ export function LibraryNavbar() {
                 >
                   Criar categoria</Text>
               </Button>
-
-              <ModalCreateEndEditFolder 
-                type="edit"
-                isOpen={isOpen}
-                onClose={onClose}
-                onChange={event => setCreateFolderValue(event.target.value)}
-                onKeyPress={e => e.key === 'Enter' && createFolder()}
-                createEditButton={
-                  <Button colorScheme="blue" onClick={createFolder}>Criar</Button>
-                }
-                placeholder="Digite o nome da categoria" 
-              />
 
               <Flex w="100%" flexDirection="column">
                 {dataBaseFolders.map(item => (
@@ -210,7 +203,12 @@ export function LibraryNavbar() {
                       <ButtonToContextMenu 
                         title="Editar" 
                         icon={<FaRegEdit />}  
-                        onClick={() => handleEditFolder(item.titleOfFolder)}
+                        onClick={() => {
+                          setNameOfFolder(item.titleOfFolder)
+                          onOpen()
+                          setTypeOfModal('edit')
+                          
+                        } }
                       /> 
                     }
                     removeButton={ 
@@ -272,6 +270,32 @@ export function LibraryNavbar() {
           </TabPanel>
         </TabPanels>
       </Tabs>
+
+      <ModalCreateEndEditFolder 
+        type={typeOfModal}
+        isOpen={isOpen}
+        onClose={onClose}
+        onChange={event => setCreateFolderValue(event.target.value)}
+        // onKeyPress={e => e.key === 'Enter' ? typeOfModal === 'create' && createFolder() : e.key === 'Enter' ? typeOfModal === "edit" && handleEditFolder(nameOfFolder) }
+        onKeyPress={e => {
+          if(e.key === "Enter" && typeOfModal === 'create') {
+            createFolder()
+          } else if(e.key === "Enter" && typeOfModal === 'edit') {
+            handleEditFolder(nameOfFolder)
+          }
+        }}
+        createEditButton={
+          <Button 
+            colorScheme="blue" 
+            onClick={() => typeOfModal === 'create' ? createFolder() : handleEditFolder(nameOfFolder) }
+          >
+            {typeOfModal === 'edit' ? 'Editar' : 'Criar'}
+          </Button>
+        }
+        placeholder={typeOfModal === "create" ? "Digite o nome da categoria" : "Digite o novo nome da categoria"  }
+        nameOfFolder={nameOfFolder}
+      />
+
     </Box>
   )
 }
